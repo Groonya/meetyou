@@ -1,0 +1,27 @@
+version: '3'
+services:
+    meetyou-nginx:
+        build:
+            context: ./meetyou/docker
+            dockerfile: nginx.docker
+        volumes:
+            - ./meetyou:/app
+        depends_on:
+            - meetyou-php-fpm
+        ports:
+            - "8080:80"
+    meetyou-php-fpm:
+        build:
+            context: ./meetyou/docker
+            dockerfile: php-fpm.docker
+        volumes:
+            - ./meetyou:/app
+    meetyou-php-cli:
+        build:
+            context: ./meetyou/docker
+            dockerfile: php-cli.docker
+        volumes:
+            - ./meetyou:/app
+            - composer:/root/.composer/cache
+volumes:
+    composer:
