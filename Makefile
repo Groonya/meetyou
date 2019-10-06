@@ -18,7 +18,7 @@ docker-pull:
 docker-build:
 	docker-compose build
 
-meetyou-init: meetyou-composer-install
+meetyou-init: meetyou-composer-install meetyou-wait-db meetyou-migrations
 
 meetyou-bash:
 	docker-compose run --rm meetyou-php-cli bash
@@ -28,3 +28,13 @@ meetyou-clear:
 
 meetyou-composer-install:
 	docker-compose run --rm meetyou-php-cli composer install
+
+meetyou-wait-db:
+	until docker-compose exec -T meetyou-mysql mysql -u root -pmeetyou  -e ";" ; do sleep 1 ; done
+
+meetyou-migrations:
+	docker-compose run --rm meetyou-php-cli php bin/console doctrine:migrations:migrate --no-interaction
+
+meetyou-assets:
+	docker-compose run --rm meetyou-node yarn install
+	docker-compose run --rm meetyou-node yarn watch
