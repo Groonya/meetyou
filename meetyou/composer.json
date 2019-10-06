@@ -24,6 +24,7 @@
         "webmozart/assert": "^1.5"
     },
     "require-dev": {
+        "fzaninotto/faker": "^1.8",
         "symfony/maker-bundle": "^1.13",
         "symfony/var-dumper": "4.3.*"
     },
