@@ -47,7 +47,9 @@ class Handler
             $this->hasher->hash($command->password)
         );
 
-        $user->setInterests($command->interests);
+        $interests = $command->interests ?? '';
+
+        $user->setInterests($interests);
 
         $this->mapper->insert($user);
     }

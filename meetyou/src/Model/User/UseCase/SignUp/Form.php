@@ -32,7 +32,7 @@ class Form extends AbstractType
             ])
             ->add('birthday', DateType::class,
                 ['years' => $years, 'input' => 'datetime_immutable'])
-            ->add('interests', TextareaType::class)
+            ->add('interests', TextareaType::class, ['required' => false])
             ->add('sign_up', SubmitType::class);
     }
 
