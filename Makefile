@@ -18,7 +18,7 @@ docker-pull:
 docker-build:
 	docker-compose build
 
-meetyou-init: meetyou-composer-install meetyou-wait-db meetyou-migrations
+meetyou-init: meetyou-composer-install meetyou-wait-db meetyou-migrations meetyou-assets-build
 
 meetyou-bash:
 	docker-compose run --rm meetyou-php-cli bash
@@ -35,6 +35,10 @@ meetyou-wait-db:
 meetyou-migrations:
 	docker-compose run --rm meetyou-php-cli php bin/console doctrine:migrations:migrate --no-interaction
 
-meetyou-assets:
+meetyou-assets-watch:
 	docker-compose run --rm meetyou-node yarn install
 	docker-compose run --rm meetyou-node yarn watch
+
+meetyou-assets-build:
+	docker-compose run --rm meetyou-node yarn install
+	docker-compose run --rm meetyou-node yarn build
