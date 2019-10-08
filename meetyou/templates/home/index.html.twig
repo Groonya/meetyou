@@ -1,1 +1,18 @@
 {% extends 'base.html.twig' %}
+{% block body %}
+    <div class="container">
+        {{ knp_pagination_render(pagination) }}
+        <div class="columns">
+            {% for items_batch in pagination|batch(pagination|length/3) %}
+                <div class="column">
+                    {% for item in items_batch %}
+                        <a href="{{ path('user.profile', {id: item.id}) }}">{{ item.name_first|title }} {{ item.name_last|title }}</a>
+                        <br>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
+        {{ knp_pagination_render(pagination) }}
+    </div>
+
+{% endblock %}

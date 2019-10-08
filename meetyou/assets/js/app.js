@@ -11,4 +11,22 @@ require('../css/app.scss')
 // Need jQuery? Install it with "yarn add jquery", then uncomment to require it.
 // const $ = require('jquery');
 
-console.log('Hello Webpack Encore! Edit me in assets/js/app.js');
+document.addEventListener('DOMContentLoaded', () => {
+  const burger = document.querySelector('#burger')
+  const navbarMenu = document.querySelector('#navbarMenu')
+
+  burger.addEventListener('click', () => {
+    burger.classList.toggle('is-active')
+    navbarMenu.classList.toggle('is-active')
+  })
+})
+
+document.addEventListener('DOMContentLoaded', () => {
+  const hasDropDown = document.querySelectorAll('.has-dropdown')
+
+  hasDropDown.forEach((el) => {
+    el.addEventListener('click', () => {
+      el.classList.toggle('is-active')
+    })
+  })
+})

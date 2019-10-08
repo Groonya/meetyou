@@ -56,4 +56,9 @@ class Command
      * @Assert\Length(min="2", max="100")
      */
     public $password;
+
+    /**
+     * @var string
+     */
+    public $interests;
 }

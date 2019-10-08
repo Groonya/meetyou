@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <table class="table">
+        <tr>
+            <td>Name:</td>
+            <td>{{ user.name.first }} {{ user.name.last }}</td>
+        </tr>
+        <tr>
+            <td>City:</td>
+            <td>{{ user.city.name }}</td>
+        </tr>
+        <tr>
+            <td>Age:</td>
+            <td>{{ user.birthday|age }}</td>
+        </tr>
+        <tr>
+            <td>Gender:</td>
+            <td>{{ user.gender.value|title }}</td>
+        </tr>
+        <tr>
+            <td>Email:</td>
+            <td>{{ user.email.value }}</td>
+        </tr>
+        <tr>
+            <td>Interests:</td>
+            <td>{{ user.interests }}</td>
+        </tr>
+    </table>
+{% endblock %}

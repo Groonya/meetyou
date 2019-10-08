@@ -9,8 +9,16 @@
     {% if type == 'text' or type == 'email' or type == 'password' or type == 'date' %}
         {% set attr = attr|merge({class: (attr.class|default('') ~ ' input')|trim}) %}
     {% endif %}
+    {% if type == 'textarea' %}
+
+    {% endif %}
     {{ parent() }}
 {%- endblock form_widget_simple -%}
+
+{%- block textarea_widget -%}
+    {% set attr = attr|merge({class: (attr.class|default('') ~ ' textarea')|trim}) %}
+    {{ parent() }}
+{%- endblock textarea_widget -%}
 
 {%- block choice_widget_collapsed -%}
     {%- if required and placeholder is none and not placeholder_in_choices and not multiple and (attr.size is not defined or attr.size <= 1) -%}

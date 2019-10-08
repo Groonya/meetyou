@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
@@ -25,12 +26,13 @@ class Form extends AbstractType
             ->add('password', PasswordType::class)
             ->add('firstname', TextType::class)
             ->add('lastname', TextType::class)
+            ->add('city', TextType::class)
             ->add('gender', ChoiceType::class, [
                 'choices' => ['Male' => 'Male', 'Female' => 'Female'],
             ])
             ->add('birthday', DateType::class,
-                ['years' => $years])
-            ->add('city', TextType::class)
+                ['years' => $years, 'input' => 'datetime_immutable'])
+            ->add('interests', TextareaType::class)
             ->add('sign_up', SubmitType::class);
     }
 

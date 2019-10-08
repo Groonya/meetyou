@@ -21,8 +21,8 @@ class Name
     {
         Assert::notEmpty($first);
         Assert::notEmpty($last);
-        $this->first = $first;
-        $this->last = $last;
+        $this->first = mb_strtolower($first);
+        $this->last = mb_strtolower($last);
     }
 
     /**
@@ -30,7 +30,7 @@ class Name
      */
     public function getFirst(): string
     {
-        return $this->first;
+        return $this->capitalizeFirstChar($this->first);
     }
 
     /**
@@ -38,6 +38,22 @@ class Name
      */
     public function getLast(): string
     {
-        return $this->last;
+        return $this->capitalizeFirstChar($this->last);
+    }
+
+    public function full(): string
+    {
+        $first = $this->getFirst();
+        $last = $this->getLast();
+
+        return "{$first} $last";
+    }
+
+    private function capitalizeFirstChar(string $str): string
+    {
+        $first = mb_substr($str, 0, 1);
+        $other = mb_substr($str, 1);
+
+        return mb_strtoupper($first).$other;
     }
 }

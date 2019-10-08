@@ -36,6 +36,21 @@ class UserMapper
         return $this->map($row);
     }
 
+    public function findById(string $id): ?User
+    {
+        $sql = 'SELECT * FROM users WHERE id = :id';
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindValue('id', $id);
+        $stmt->execute();
+        $row = $stmt->fetch(FetchMode::ASSOCIATIVE);
+
+        if ($row === false) {
+            return null;
+        }
+
+        return $this->map($row);
+    }
+
     private function map($row): User
     {
         return User::fromState($row);
@@ -57,4 +72,6 @@ class UserMapper
         $stmt->bindValue('city', $user->getCity()->getName());
         $stmt->execute();
     }
+
+
 }
