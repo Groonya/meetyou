@@ -40,23 +40,33 @@ class LoadCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $faker = Factory::create();
+        $password = $this->hasher->hash('123');
 
-        for ($i = 0; $i < 1000; $i++) {
-            $gender = [Gender::male(), Gender::female()];
 
-            $user = new User(
-                Id::next(),
-                new Name($faker->firstName, $faker->lastName),
-                new City($faker->city),
-                new DateTimeImmutable($faker->date()),
-                $faker->randomElement($gender),
-                new Email($faker->unique()->email),
-                $this->hasher->hash($faker->password)
-            );
+        for ($k = 0; $k < 1000; $k++) {
+            $users = [];
+            for ($i = 0; $i < 1000; $i++) {
+                $gender = [Gender::male(), Gender::female()];
 
-            $user->setInterests($faker->realText());
+                $user = new User(
+                    Id::next(),
+                    new Name($faker->firstName, $faker->lastName),
+                    new City($faker->city),
+                    new DateTimeImmutable($faker->date()),
+                    $faker->randomElement($gender),
+                    new Email($k.$i.$faker->email),
+                    $password
+                );
 
-            $this->mapper->insert($user);
+                $user->setInterests($faker->realText());
+                $users[] = $user;
+            }
+
+            $this->mapper->runInTransaction(function () use (&$users) {
+                array_walk($users, function ($user) {
+                    $this->mapper->insert($user);
+                });
+            });
         }
     }
 

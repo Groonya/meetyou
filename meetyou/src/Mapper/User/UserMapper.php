@@ -73,5 +73,10 @@ class UserMapper
         $stmt->execute();
     }
 
+    public function runInTransaction(\Closure $callback)
+    {
+        $this->connection->transactional($callback);
+    }
+
 
 }
