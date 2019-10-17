@@ -54,7 +54,7 @@ class LoadCommand extends Command
                     new City($faker->city),
                     new DateTimeImmutable($faker->date()),
                     $faker->randomElement($gender),
-                    new Email($k.$i.$faker->email),
+                    new Email($k.'_'.$i.'_'.$faker->email),
                     $password
                 );
 
