@@ -43,7 +43,7 @@ class LoadCommand extends Command
         $password = $this->hasher->hash('123');
 
 
-        for ($k = 0; $k < 1000; $k++) {
+        for ($k = 0; $k < 100; $k++) {
             $users = [];
             for ($i = 0; $i < 1000; $i++) {
                 $gender = [Gender::male(), Gender::female()];
