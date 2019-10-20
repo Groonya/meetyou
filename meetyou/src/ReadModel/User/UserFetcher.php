@@ -36,7 +36,7 @@ class UserFetcher
 
     public function all(int $page, int $limit): PaginationInterface
     {
-        $sql = 'SELECT * FROM users ORDER BY name_first, name_last';
+        $sql = 'SELECT id, name_first, name_last FROM users ORDER BY name_first, name_last';
 
         $target = new CallbackPagination(function () {
             $stmt = $this->connection->prepare('SELECT COUNT(*) FROM users');
