@@ -55,7 +55,7 @@ EXPLAIN SELECT u.id, u.name_first, u.name_last FROM users u WHERE u.name_first L
 
 Так как мы используем OR и LIKE по префиксу, то составной индекс тут не подойдет. Поэтому делаем по индексу на каждое поле. Еще можно переписать запрос на UNION, но по факту получится тоже самое что с index_merge. Ну или можно выполнить два отдельных запроса и смержить результат на уровне приложения.
 
-##Графики
+## Графики
 
 ![Latency](https://github.com/Groonya/meetyou/blob/master/vegeta/report/01_indexes/latency.png)
 
