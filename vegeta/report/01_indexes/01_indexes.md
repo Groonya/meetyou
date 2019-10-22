@@ -1,6 +1,7 @@
 Вместо wrk использовал vegeta (https://github.com/tsenart/vegeta) - думаю небольшая разница для нас.
 
 Вывод vegeta до добавления индекса (для 1/10/100 одновременных запросов. При 1000 уже не тянет даже с индексами):
+
 **1rps:**
 
     echo "GET http://localhost:8080/?q=zor" | vegeta attack -rate=1  -header 'Cookie: PHPSESSID=3fa63f4348293b99ccb1884d996b66da' -duration=1s -timeout=0 | vegeta report -type=text
@@ -55,5 +56,7 @@ EXPLAIN SELECT u.id, u.name_first, u.name_last FROM users u WHERE u.name_first L
 Так как мы используем OR и LIKE по префиксу, то составной индекс тут не подойдет. Поэтому делаем по индексу на каждое поле. Еще можно переписать запрос на UNION, но по факту получится тоже самое что с index_merge. Ну или можно выполнить два отдельных запроса и смержить результат на уровне приложения.
 
 ##Графики
-![Latency](https://github.com/Groonya/meetyou/tree/master/vegeta/report/01_indexes/latency.png)
-![Throughput](https://github.com/Groonya/meetyou/tree/master/vegeta/report/01_indexes/throughput.png)
+
+![Latency](https://github.com/Groonya/meetyou/blob/master/vegeta/report/01_indexes/latency.png)
+
+![Throughput](https://github.com/Groonya/meetyou/blob/master/vegeta/report/01_indexes/throughput.png)
