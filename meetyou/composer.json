@@ -22,11 +22,13 @@
         "symfony/validator": "4.3.*",
         "symfony/webpack-encore-bundle": "^1.6",
         "symfony/yaml": "4.3.*",
-        "webmozart/assert": "^1.5"
+      "webmozart/assert": "^1.5",
+      "ext-pdo": "*"
     },
     "require-dev": {
         "fzaninotto/faker": "^1.8",
         "symfony/maker-bundle": "^1.13",
+      "symfony/profiler-pack": "^1.0",
         "symfony/var-dumper": "4.3.*"
     },
     "config": {

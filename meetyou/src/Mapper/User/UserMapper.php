@@ -73,6 +73,11 @@ class UserMapper
         $stmt->execute();
     }
 
+    public function deleteAll(): void
+    {
+        $this->connection->exec('TRUNCATE TABLE users');
+    }
+
     public function runInTransaction(\Closure $callback)
     {
         $this->connection->transactional($callback);

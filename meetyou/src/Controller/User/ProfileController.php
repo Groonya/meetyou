@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ProfileController extends AbstractController
 {
     /**
-     * @Route(path="/{id}", name="user.profile")
+     * @Route(path="/id{id}", name="user.profile")
      * @param UserFetcher $fetcher
      * @param string      $id
      * @return Response

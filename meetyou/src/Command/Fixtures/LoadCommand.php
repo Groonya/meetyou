@@ -39,11 +39,13 @@ class LoadCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->mapper->deleteAll();
+
         $faker = Factory::create();
         $password = $this->hasher->hash('123');
 
 
-        for ($k = 0; $k < 100; $k++) {
+        for ($k = 0; $k < 1000; $k++) {
             $users = [];
             for ($i = 0; $i < 1000; $i++) {
                 $gender = [Gender::male(), Gender::female()];
