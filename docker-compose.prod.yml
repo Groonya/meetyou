@@ -29,5 +29,6 @@ services:
       MYSQL_DATABASE: meetyou
       MYSQL_USER: meetyou
       MYSQL_PASSWORD: ${MEETYOU_DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MEETYOU_DB_ROOT_PASSWORD}
 volumes:
   meetyou-mysql:
