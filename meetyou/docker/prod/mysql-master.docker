@@ -1,0 +1,4 @@
+FROM mysql:5.7.28
+
+COPY ./docker/prod/mysql/conf.d/* /etc/mysql/conf.d/
+COPY ./docker/prod/mysql/docker-entrypoint-initdb.d/* /docker-entrypoint-initdb.d/

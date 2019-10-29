@@ -45,3 +45,23 @@ meetyou-assets-watch:
 meetyou-assets-build:
 	docker-compose run --rm meetyou-node yarn install
 	docker-compose run --rm meetyou-node yarn build
+
+build-production:
+	docker build --pull --file=meetyou/docker/prod/mysql-master.docker -t ${REGISTRY_ADDRESS}/meetyou-mysql-master:${IMAGE_TAG} meetyou
+	docker build --pull --file=meetyou/docker/prod/nginx.docker -t ${REGISTRY_ADDRESS}/meetyou-nginx:${IMAGE_TAG} meetyou
+	docker build --pull --file=meetyou/docker/prod/php-fpm.docker -t ${REGISTRY_ADDRESS}/meetyou-php-fpm:${IMAGE_TAG} meetyou
+	docker build --pull --file=meetyou/docker/prod/php-cli.docker -t ${REGISTRY_ADDRESS}/meetyou-php-cli:${IMAGE_TAG} meetyou
+
+push-production:
+	docker push ${REGISTRY_ADDRESS}/meetyou-mysql-master:${IMAGE_TAG}
+	docker push ${REGISTRY_ADDRESS}/meetyou-nginx:${IMAGE_TAG}
+	docker push ${REGISTRY_ADDRESS}/meetyou-php-fpm:${IMAGE_TAG}
+	docker push ${REGISTRY_ADDRESS}/meetyou-php-cli:${IMAGE_TAG}
+
+deploy-production:
+	ssh -o StrictHostKeyChecking=no ${PRODUCTION_HOST} -p ${PRODUCTION_PORT} 'rm -rf docker-compose.yml .env'
+	scp -o StrictHostKeyChecking=no -P ${PRODUCTION_PORT} docker-compose.prod.yml ${PRODUCTION_HOST}:docker-compose.yml
+	ssh -o StrictHostKeyChecking=no ${PRODUCTION_HOST} -p ${PRODUCTION_PORT} 'echo "REGISTRY_ADDRESS=${REGISTRY_ADDRESS}" >> .env'
+	ssh -o StrictHostKeyChecking=no ${PRODUCTION_HOST} -p ${PRODUCTION_PORT} 'echo "IMAGE_TAG=${IMAGE_TAG}" >> .env'
+	ssh -o StrictHostKeyChecking=no ${PRODUCTION_HOST} -p ${PRODUCTION_PORT} 'echo "MEETYOU_APP_SECRET=${MEETYOU_APP_SECRET}" >> .env'
+	ssh -o StrictHostKeyChecking=no ${PRODUCTION_HOST} -p ${PRODUCTION_PORT} 'echo "MEETYOU_DB_PASSWORD=${MEETYOU_DB_PASSWORD}" >> .env'
