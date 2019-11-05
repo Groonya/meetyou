@@ -1,3 +1,8 @@
 [mysqld]
 server-id = 1
 log-bin = mysql-bin
+query_cache_size = 0
+query_cache_type = 0
+query_cache_limit = 1M
+innodb_buffer_pool_size = 256M
+innodb_log_file_size = 64
