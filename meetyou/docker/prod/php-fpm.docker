@@ -33,6 +33,8 @@ FROM php:7.3-fpm
 
 RUN docker-php-ext-install pdo_mysql
 
+RUN docker-php-ext-enable opcache
+
 COPY ./docker/prod/php/default.ini /usr/local/etc/php/conf.d/default.ini
 
 WORKDIR /app
