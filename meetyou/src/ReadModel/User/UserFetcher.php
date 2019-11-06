@@ -7,14 +7,18 @@ namespace App\ReadModel\User;
 use App\Mapper\User\UserMapper;
 use App\Model\User\Entity\User;
 use App\ReadModel\User\Filter\Filter;
+use DateInterval;
 use Doctrine\DBAL\Connection;
+use InvalidArgumentException;
 use Knp\Component\Pager\Event\Subscriber\Paginate\Callback\CallbackPagination;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use PDO;
+use Psr\SimpleCache\CacheInterface;
 
 class UserFetcher
 {
+    private const CACHE_COUNT_KEY = 'users_count';
     /**
      * @var Connection
      */
@@ -27,12 +31,18 @@ class UserFetcher
      * @var UserMapper
      */
     private $mapper;
+    private $cache;
 
-    public function __construct(Connection $connection, UserMapper $mapper, PaginatorInterface $paginator)
-    {
+    public function __construct(
+        Connection $connection,
+        UserMapper $mapper,
+        PaginatorInterface $paginator,
+        CacheInterface $cache
+    ) {
         $this->connection = $connection;
         $this->paginator = $paginator;
         $this->mapper = $mapper;
+        $this->cache = $cache;
     }
 
     public function all(int $page, int $limit): PaginationInterface
@@ -49,7 +59,7 @@ class UserFetcher
     public function search(int $page, int $limit, Filter $filter): PaginationInterface
     {
         if (!$filter->name) {
-            throw new \InvalidArgumentException('Name can\'t be blank');
+            throw new InvalidArgumentException('Name can\'t be blank');
         }
         $callback = new CallbackPagination(function () use ($filter) {
             return $this->countByName($filter->name);
@@ -85,10 +95,16 @@ class UserFetcher
 
     private function countAll()
     {
-        $stmt = $this->connection->prepare('SELECT COUNT(*) FROM users');
-        $stmt->execute();
+        if (($count = $this->cache->get(self::CACHE_COUNT_KEY)) === null) {
+            $stmt = $this->connection->prepare('SELECT COUNT(*) FROM users');
+            $stmt->execute();
 
-        return $stmt->fetchColumn();
+            $count = $stmt->fetchColumn();
+
+            $this->cache->set(self::CACHE_COUNT_KEY, $count, new DateInterval('P1D'));
+        }
+
+        return $count;
     }
 
     private function fetchAll(int $offset, int $limit): array
