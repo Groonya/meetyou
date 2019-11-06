@@ -72,20 +72,16 @@ class UserFetcher
 
     private function countByName(string $name)
     {
-        $stmt = $this->connection->prepare('SELECT COUNT(*) FROM users WHERE name_first LIKE :name OR name_last LIKE :name');
-        $stmt->bindValue('name', "$name%");
-        $stmt->execute();
+        $sql = 'SELECT COUNT(*) FROM users WHERE name_first LIKE :name OR name_last LIKE :name';
 
-        return $stmt->fetchColumn();
+        return $this->connection->executeQuery($sql, ['name' => "$name%"])->fetchColumn();
     }
 
     private function fetchByName(int $offset, int $limit, string $name): array
     {
-        $stmt = $this->connection->prepare("SELECT u.id, u.name_first, u.name_last FROM users u WHERE u.name_first LIKE :name OR name_last LIKE :name ORDER BY u.id LIMIT $offset, $limit");
-        $stmt->bindValue('name', "$name%");
-        $stmt->execute();
+        $sql = "SELECT u.id, u.name_first, u.name_last FROM users u WHERE u.name_first LIKE :name OR name_last LIKE :name ORDER BY u.id LIMIT $offset, $limit";
 
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $this->connection->executeQuery($sql, ['name' => "$name%"])->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function findById(string $id): ?User
@@ -99,10 +95,7 @@ class UserFetcher
         $count = $cacheItem->get();
 
         if ($count === null) {
-            $stmt = $this->connection->prepare('SELECT COUNT(*) FROM users');
-            $stmt->execute();
-
-            $count = $stmt->fetchColumn();
+            $count = $this->connection->executeQuery('SELECT COUNT(*) FROM users')->fetchColumn();
             $cacheItem->set($count)->expiresAfter(new DateInterval('P1D'));
             $this->cache->save($cacheItem);
         }
@@ -112,10 +105,10 @@ class UserFetcher
 
     private function fetchAll(int $offset, int $limit): array
     {
-        $stmt = $this->connection->prepare("SELECT id, name_first, name_last FROM users ORDER BY id LIMIT $offset, $limit");
-        $stmt->execute();
-
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return
+            $this->connection
+                ->executeQuery("SELECT id, name_first, name_last FROM users ORDER BY id LIMIT $offset, $limit")
+                ->fetchAll(PDO::FETCH_ASSOC);
     }
 
 

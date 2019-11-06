@@ -23,11 +23,8 @@ class UserMapper
 
     public function findByEmail(string $email): ?User
     {
-        $sql = 'SELECT * FROM users WHERE email = :email';
-        $stmt = $this->connection->prepare($sql);
-        $stmt->bindValue('email', $email);
-        $stmt->execute();
-        $row = $stmt->fetch(FetchMode::ASSOCIATIVE);
+        $row = $this->connection->executeQuery('SELECT * FROM users WHERE email = :email', ['email' => $email])
+            ->fetch(FetchMode::ASSOCIATIVE);
 
         if ($row === false) {
             return null;
@@ -38,11 +35,8 @@ class UserMapper
 
     public function findById(string $id): ?User
     {
-        $sql = 'SELECT * FROM users WHERE id = :id';
-        $stmt = $this->connection->prepare($sql);
-        $stmt->bindValue('id', $id);
-        $stmt->execute();
-        $row = $stmt->fetch(FetchMode::ASSOCIATIVE);
+        $row = $this->connection->executeQuery('SELECT * FROM users WHERE id = :id', ['id' => $id])
+            ->fetch(FetchMode::ASSOCIATIVE);
 
         if ($row === false) {
             return null;

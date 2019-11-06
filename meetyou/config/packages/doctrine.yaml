@@ -9,3 +9,8 @@ doctrine:
             collate: utf8mb4_unicode_ci
 
         url: '%env(resolve:DATABASE_URL)%'
+        slaves:
+          slave_1:
+            url: '%env(resolve:DATABASE_URL_SLAVE_1)%'
+          slave_2:
+            url: '%env(resolve:DATABASE_URL_SLAVE_2)%'

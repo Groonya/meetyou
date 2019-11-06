@@ -1,1 +1,1 @@
-echo "GET http://165.22.66.197:8080" | vegeta attack -rate=10  -header 'Cookie: PHPSESSID=35afa37318069e44cd25d29fe83a6b14' -duration=1m | vegeta report -type='hist[0,1s,2s,3s,4s,5s,6s,7s,8s,9s,10s,20s,30s,40s,50s,60s]'
+echo "GET http://165.22.66.197:8080" | vegeta attack -rate=10  -header 'Cookie: PHPSESSID=35afa37318069e44cd25d29fe83a6b14' -duration=1m | vegeta report

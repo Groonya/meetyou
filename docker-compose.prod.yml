@@ -13,11 +13,15 @@ services:
     environment:
       APP_SECRET: ${MEETYOU_APP_SECRET}
       DATABASE_URL: mysql://meetyou:${MEETYOU_DB_PASSWORD}@meetyou-mysql:3306/meetyou
+      DATABASE_URL_SLAVE_1: ${DATABASE_URL_SLAVE_1}
+      DATABASE_URL_SLAVE_2: ${DATABASE_URL_SLAVE_2}
   meetyou-php-cli:
     image: ${REGISTRY_ADDRESS}/meetyou-php-cli:${IMAGE_TAG}
     environment:
       APP_SECRET: ${MEETYOU_APP_SECRET}
       DATABASE_URL: mysql://meetyou:${MEETYOU_DB_PASSWORD}@meetyou-mysql:3306/meetyou
+      DATABASE_URL_SLAVE_1: ${DATABASE_URL_SLAVE_1}
+      DATABASE_URL_SLAVE_2: ${DATABASE_URL_SLAVE_2}
   meetyou-mysql:
     image: ${REGISTRY_ADDRESS}/meetyou-mysql-master:${IMAGE_TAG}
     restart: always
