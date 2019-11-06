@@ -14,7 +14,7 @@ use Knp\Component\Pager\Event\Subscriber\Paginate\Callback\CallbackPagination;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use PDO;
-use Psr\SimpleCache\CacheInterface;
+use Psr\Cache\CacheItemPoolInterface;
 
 class UserFetcher
 {
@@ -37,7 +37,7 @@ class UserFetcher
         Connection $connection,
         UserMapper $mapper,
         PaginatorInterface $paginator,
-        CacheInterface $cache
+        CacheItemPoolInterface $cache
     ) {
         $this->connection = $connection;
         $this->paginator = $paginator;
@@ -95,13 +95,16 @@ class UserFetcher
 
     private function countAll()
     {
-        if (($count = $this->cache->get(self::CACHE_COUNT_KEY)) === null) {
+        $cacheItem = $this->cache->getItem(self::CACHE_COUNT_KEY);
+        $count = $cacheItem->get();
+
+        if ($count === null) {
             $stmt = $this->connection->prepare('SELECT COUNT(*) FROM users');
             $stmt->execute();
 
             $count = $stmt->fetchColumn();
-
-            $this->cache->set(self::CACHE_COUNT_KEY, $count, new DateInterval('P1D'));
+            $cacheItem->set($count)->expiresAfter(new DateInterval('P1D'));
+            $this->cache->save($cacheItem);
         }
 
         return $count;
